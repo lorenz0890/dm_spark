@@ -35,24 +35,23 @@ if __name__ == "__main__":
     A.registerTempTable("A_tab")
     B.registerTempTable("B_tab")
 
-    A.show()
+    A.show() #_c0 = rows, _c1 = columns
     B.show()
 
+    #Multiplication:
     #https://therightjoin.wordpress.com/2014/07/18/matrix-multiplication-using-sql/
     #https://notes.rohitagarwal.org/2013/06/07/sparse-matrix-multiplication-using-sql.html
-    J = spark.sql("SELECT A_tab._c0, B_tab._c1, SUM(A_tab._c2 * B_tab._c2) "+
+    J = spark.sql("SELECT A_tab._c0, B_tab._c1, SUM(A_tab._c2 * B_tab._c2) AS _c2 "+
                   "FROM A_tab, B_tab "+
-                  "WHERE A_tab._c0 = B_tab._c0 "+ #should be A_tab._c1
+                  "WHERE A_tab._c1 = B_tab._c0 "+ #should be A_tab._c1?
                   "GROUP BY A_tab._c0, B_tab._c1")
 
     J.show()
 
-    C = spark.sql("SELECT A._c0, "+
-                  "B._c1, "+
-                  "SUM(A._c2 * B._c2) AS _c2 "+
+    C = spark.sql("SELECT A._c0, B._c1, SUM(A._c2 * B._c2) AS _c2 "+
                   "FROM A_tab A "+
                   "INNER JOIN B_tab B "+
-                  "ON A._c1 = B._c1 "+
+                  "ON A._c1 = B._c0 "+
                   "GROUP BY A._c0, B._c1")
 
     C.show()
