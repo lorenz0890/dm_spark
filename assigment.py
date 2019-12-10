@@ -42,7 +42,7 @@ if __name__ == "__main__":
     #https://notes.rohitagarwal.org/2013/06/07/sparse-matrix-multiplication-using-sql.html
     J = spark.sql("SELECT A_tab._c0, B_tab._c1, SUM(A_tab._c2 * B_tab._c2) "+
                   "FROM A_tab, B_tab "+
-                  "WHERE A_tab._c0 = B_tab._c0 "+
+                  "WHERE A_tab._c0 = B_tab._c0 "+ #should be A_tab._c1
                   "GROUP BY A_tab._c0, B_tab._c1")
 
     J.show()
